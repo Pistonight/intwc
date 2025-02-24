@@ -1,0 +1,53 @@
+version: '3'
+
+includes:
+  ecma:
+    taskfile: ../mono-dev/task/ecma.yaml
+    internal: true
+  git:
+    taskfile: ../mono-dev/task/git.yaml
+    internal: true
+
+tasks:
+  build:
+    cmds:
+      - bun scripts/build-themes.ts > src/theme/colors.ts
+
+  check:
+    cmds:
+      - task: ecma:tsc-check
+      - task: ecma:eslint-check
+      - task: ecma:prettier-check
+      - task: build
+      - task: git:check-modification
+        vars:
+          CHECK_PATH: packages/intwc/src
+          CHECK_MESSAGE: Please regenerate and commit source code
+
+  update-patch:
+    vars:
+      MONACO_EDITOR_VERSION:
+        sh: jq '.dependencies.["monaco-editor"]' package.json | tr -d '"'
+    cmds:
+      # Clean up
+      - rm -rf monaco-editor-patch
+      # Reinstall the unpatched version
+      - bun scripts/pre-patch.ts
+      - pnpm install
+      # Run patch script
+      - pnpm patch monaco-editor@{{.MONACO_EDITOR_VERSION}} --edit-dir monaco-editor-patch > out
+      - rm out
+      - bun scripts/patch.ts
+      # Apply the patch
+      - pnpm patch-commit monaco-editor-patch || true
+      - rm -rf patches
+      # Move patch file to this file
+      - mv ../../patches .
+      # Clean up
+      - task: apply-patch
+      - rm -rf monaco-editor-patch
+
+  apply-patch:
+    cmds:
+      - bun scripts/post-patch.ts
+      - pnpm install

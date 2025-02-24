@@ -1,0 +1,35 @@
+{
+    "name": "@pistonite/intwc",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "description": "I Need To Write Code: Shared code editor UX for my projects",
+    "bugs": {
+        "url": "https://github.com/Pistonight/intwc/issues"
+    },
+    "license": "MIT",
+    "author": "Pistonight <pistonknight@outlook.com>",
+    "files": [
+        "src/**/*"
+    ],
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Pistonight/intwc.git"
+    },
+    "dependencies": {
+        "@pistonite/pure": "catalog:",
+        "monaco-editor": "0.52.2",
+        "react": "catalog:"
+    },
+    "devDependencies": {
+        "@catppuccin/palette": "^1.7.1",
+        "@types/react": "catalog:",
+        "eslint": "catalog:",
+        "mono-dev": "workspace:*",
+        "typescript": "catalog:",
+        "vite": "catalog:"
+    }
+}
