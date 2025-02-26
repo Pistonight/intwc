@@ -1,4 +1,3 @@
-
 // @ts-ignore
 import fs from "node:fs";
 
@@ -7,7 +6,7 @@ let rootPackageJson: Record<string, any> = {};
 let needFix = true;
 try {
     rootPackageJson = JSON.parse(fs.readFileSync(ROOT_PACKAGE, "utf-8"));
-} catch{
+} catch {
     console.log("No root package.json found, skipping pre-patch");
     needFix = false;
 }
@@ -16,7 +15,9 @@ if (needFix && !rootPackageJson.pnpm) {
     needFix = false;
 }
 if (needFix && !rootPackageJson.pnpm.patchedDependencies) {
-    console.log("No `patchedDependencies` key in root package.json, skipping pre-patch");
+    console.log(
+        "No `patchedDependencies` key in root package.json, skipping pre-patch",
+    );
     needFix = false;
 }
 

@@ -1,5 +1,5 @@
-import * as monaco from 'monaco-editor';
-import { serial } from '@pistonite/pure/sync';
+import * as monaco from "monaco-editor";
+import { serial } from "@pistonite/pure/sync";
 
 import type { MarkerResult, TextModel } from "./LanguageClient.ts";
 
@@ -9,25 +9,27 @@ export type MarkerProvider = {
 };
 const registeredProviders = new Map<string, MarkerProvider[]>();
 
-export const registerMarkerProvider = (languageId: string, provider: MarkerProvider) => {
+export const registerMarkerProvider = (
+    languageId: string,
+    provider: MarkerProvider,
+) => {
     const providers = registeredProviders.get(languageId);
     if (!providers) {
         registeredProviders.set(languageId, [provider]);
         return;
     }
     providers.push(provider);
-}
+};
 
-const provideMarkersCallback = 
-        serial({
-        fn: (checkCancel) => (model: TextModel) => {
+const provideMarkersCallback = serial({
+    fn: (checkCancel) => (model: TextModel) => {
         return provideMarkers(model, checkCancel);
-        }
-    });
+    },
+});
 
-export const getProvideMarkersCallback = (): (model: TextModel) => void => {
+export const getProvideMarkersCallback = (): ((model: TextModel) => void) => {
     return provideMarkersCallback;
-}
+};
 
 const provideMarkers = async (model: TextModel, checkCancel: () => void) => {
     const languageId = model.getLanguageId();
@@ -44,6 +46,4 @@ const provideMarkers = async (model: TextModel, checkCancel: () => void) => {
             monaco.editor.setModelMarkers(model, provider.owner, markers);
         }
     }
-}
-
-
+};

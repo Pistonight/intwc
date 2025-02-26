@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 
-import { CodeEditorApi, EditorState } from "./EditorState.ts";
+import { type CodeEditorApi, EditorState } from "./EditorState.ts";
 
 export type CodeEditorProps = {
-    /** 
+    /**
      * Callback when the editor is first created. You can return
      * a callback to be called when the editor is about to be destroyed.
      *
      * Use this to open initial file(s)
      */
-    onCreated?: (api: CodeEditorApi) => (() => void) | void;
+    onCreated?: (api: CodeEditorApi) => (() => void) | undefined;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export const CodeEditor: React.FC<CodeEditorProps> = ({onCreated, ...props}) => {
+export const CodeEditor: React.FC<CodeEditorProps> = ({
+    onCreated,
+    ...props
+}) => {
     const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -25,7 +28,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({onCreated, ...props}) => 
             cleanup?.();
             editor.dispose();
         };
-    }, [ ref]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ref]);
 
-    return (<div ref={setRef} {...props}/>);
+    return <div ref={setRef} {...props} />;
 };

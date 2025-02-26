@@ -1,6 +1,6 @@
-import * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor";
 import type { LanguageClient } from "./language/LanguageClient.ts";
-import { ThemeOptions } from "./theme/options.ts";
+import type { ThemeOptions } from "./theme/options.ts";
 
 /** Option to pass in to init */
 export type InitOption = {
@@ -23,7 +23,7 @@ export type InitOption = {
      * Theme options
      */
     theme?: ThemeOptions;
-}
+};
 
 export type PreferenceOption = {
     /** If the preference should be persisted to and loaded from localStorage */
@@ -35,35 +35,27 @@ export type PreferenceOption = {
      * These will not be applied to the persisted preference
      */
     defaults?: Partial<Preference>;
-}
+};
 
 export type Preference = {
     /**
      * Input mode for the editor, defaults to "code"
      */
     inputMode: InputMode;
-}
+};
 
 export type LanguageOption = {
-    /** 
+    /**
      * TypeScript Configuration
      *
-     * If this is not specified, TypeScript features will not be enabled
+     * If this is not specified, TypeScript features will not be enabled.
+     * You also need to use the `intwc` vite plugin to load the TypeScript worker.
      */
     typescript?: TSOption;
 
-    /** If JSON language support should be enabled */
-    json?: boolean;
-
-    /** If CSS language support should be enabled */
-    css?: boolean;
-
-    /** If HTML language support should be enabled */
-    html?: boolean;
-
     /** Custom language support */
     custom: LanguageClient[];
-}
+};
 
 export type EditorOption = {
     /**
@@ -71,17 +63,17 @@ export type EditorOption = {
      *
      * These are added on top of the defaults provided by this wrapper
      */
-    options: monaco.editor.IEditorOptions & monaco.editor.IGlobalEditorOptions
-}
+    options: monaco.editor.IEditorOptions & monaco.editor.IGlobalEditorOptions;
+};
 
 export type TSOption = {
-    /** 
+    /**
      * If DOM API should be enabled for type checking
      *
      * Default is true
      */
     dom?: boolean;
-    /** 
+    /**
      * Extra libraries to load
      */
     extraLibs?: TSExtraLib[];
@@ -93,11 +85,10 @@ export type TSExtraLib = {
      * For example, if the name is "foo", the file uri will
      * be "_lib_foo.ts"
      */
-    name: string,
+    name: string;
     /** The type definition file content */
-    content: string
-}
-
+    content: string;
+};
 
 /** Input mode of the editor */
 export type InputMode = "code" | "vim" | "emacs";

@@ -3,11 +3,13 @@ import type { TextModel } from "./LanguageClient.ts";
 import { spanToRange } from "../utils.ts";
 
 /**
- * Convert semantic tokens from triples [start, length, tokenType] to 
+ * Convert semantic tokens from triples [start, length, tokenType] to
  * LSP format [deltaLine, deltaStart, length, tokenType, tokenModifiers]
  */
 export const convertSemanticTokens = (
-    inputs: Uint32Array | number[], model: TextModel, options: SemanticConverterOptions
+    inputs: Uint32Array | number[],
+    model: TextModel,
+    options: SemanticConverterOptions,
 ): number[] => {
     const { convertType } = options;
     // inputs are triples: [start, length, type]
@@ -28,28 +30,30 @@ export const convertSemanticTokens = (
             continue;
         }
 
-        const { 
-            startLineNumber, 
-            startColumn, 
-            endLineNumber, 
-            endColumn } = spanToRange(
-            model,
-            start,
-            start + length,
-        );
+        const { startLineNumber, startColumn, endLineNumber, endColumn } =
+            spanToRange(model, start, start + length);
         if (startLineNumber === endLineNumber) {
             const deltaLine = startLineNumber - prevLine;
-            const deltaStart = deltaLine === 0 ? startColumn - prevStart : startColumn - 1;
+            const deltaStart =
+                deltaLine === 0 ? startColumn - prevStart : startColumn - 1;
 
             outputs.push(deltaLine, deltaStart, length, type, modifier);
             prevStart = startColumn;
         } else {
             // token spanning multiple lines, convert it to separate entries
             const firstStart = startColumn - 1;
-            const firstLength = model.getLineLength(startLineNumber) - firstStart;
+            const firstLength =
+                model.getLineLength(startLineNumber) - firstStart;
             const firstDeltaLine = startLineNumber - prevLine;
-            const firstDeltaStart = firstDeltaLine === 0 ? firstStart - prevStart : firstStart - 1;
-            outputs.push(firstDeltaLine, firstDeltaStart, firstLength, type, modifier);
+            const firstDeltaStart =
+                firstDeltaLine === 0 ? firstStart - prevStart : firstStart - 1;
+            outputs.push(
+                firstDeltaLine,
+                firstDeltaStart,
+                firstLength,
+                type,
+                modifier,
+            );
 
             // middle full lines
             for (let i = startLineNumber + 1; i < endLineNumber; i++) {
@@ -69,10 +73,10 @@ export const convertSemanticTokens = (
     }
 
     return outputs;
-}
+};
 
 export type SemanticConverterOptions = {
-    /** 
+    /**
      * Convert raw token type to [tokenType, tokenModifiers]
      *
      * The token type should be 1-indexed in the legend, and the modifier

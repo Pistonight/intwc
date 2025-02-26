@@ -1,7 +1,6 @@
-import * as monaco from 'monaco-editor';
-import { getProvideMarkersCallback } from './language/MarkerProviderRegistry';
-import type { EditorOption } from './types.ts';
-
+import * as monaco from "monaco-editor";
+import { getProvideMarkersCallback } from "./language/MarkerProviderRegistry";
+import type { EditorOption } from "./types.ts";
 
 export type CodeEditorApi = {
     /** Get the list of opened files */
@@ -9,7 +8,7 @@ export type CodeEditorApi = {
 
     /** Get the current opened file in the editor */
     getCurrentFile: () => string | undefined;
-    /** 
+    /**
      * Switch to the given file in the editor
      *
      * Does nothing if the file doesn't exist in the opened files
@@ -36,15 +35,15 @@ export type CodeEditorApi = {
 
     /** Subscribe to when files are changed */
     subscribe: (callback: (filename: string) => void) => () => void;
-}
+};
 
 let editorOptions: EditorOption = {
     options: {},
-}
+};
 
 export const setEditorOptions = (options: EditorOption) => {
     editorOptions = options;
-}
+};
 
 export class EditorState implements CodeEditorApi {
     private instance: monaco.editor.IStandaloneCodeEditor;
@@ -70,9 +69,7 @@ export class EditorState implements CodeEditorApi {
             ...editorOptions.options,
         });
 
-        this.extraCleanup = () => {
-            
-        };
+        this.extraCleanup = () => {};
     }
 
     /** Dispose the editor */
@@ -129,16 +126,19 @@ export class EditorState implements CodeEditorApi {
         };
     }
 
-
     public openFile(filename: string, content: string, language: string) {
         const model = this.models.get(filename);
         if (!model) {
-            const model = monaco.editor.createModel(content, language, monaco.Uri.file(filename));
+            const model = monaco.editor.createModel(
+                content,
+                language,
+                monaco.Uri.file(filename),
+            );
             const provideMarkersCallback = getProvideMarkersCallback();
             // there can be only one change event listener, so this is not exposed
             model.onDidChangeContent(() => {
                 provideMarkersCallback(model);
-                this.subscribers.forEach(subscriber => subscriber(filename));
+                this.subscribers.forEach((subscriber) => subscriber(filename));
             });
             model.updateOptions({
                 tabSize: 2,
@@ -148,7 +148,7 @@ export class EditorState implements CodeEditorApi {
                 bracketColorizationOptions: {
                     enabled: false,
                     independentColorPoolPerBracketType: false,
-                }
+                },
             });
             this.models.set(filename, model);
             // invoke the callback once to provide markers initially

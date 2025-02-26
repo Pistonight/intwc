@@ -1,0 +1,24 @@
+{
+    "name": "@pistonite/vite-plugin-intwc",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "description": "Vite plugin to bundle monoco-editor in intwc",
+    "bugs": {
+        "url": "https://github.com/Pistonight/intwc/issues"
+    },
+    "license": "MIT",
+    "author": "Pistonight <pistonknight@outlook.com>",
+    "exports": {
+        ".": "./plugin.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Pistonight/intwc.git",
+        "directory": "vite-plugin"
+    },
+    "devDependencies": {
+        "rollup": "^4.34.8",
+        "vite": "catalog:"
+    }
+}

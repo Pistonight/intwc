@@ -1,7 +1,7 @@
 import * as monaco from "monaco-editor";
 import { convertSemanticTokens } from "../language/SemanticConverter";
 
-const legend: monaco.languages.SemanticTokensLegend  = {
+const legend: monaco.languages.SemanticTokensLegend = {
     tokenTypes: [
         // 1 - Class
         "type.class",
@@ -36,45 +36,47 @@ const legend: monaco.languages.SemanticTokensLegend  = {
         // "defaultLibrary"
         "language",
         "local",
-    ]
-}
+    ],
+};
 
 const setTimeout = self.setTimeout;
 
 /** Per-model request for semantic tokens */
-type RangeSemanticTokensRequest = {
-    scheduled: false;
-} | {
-    scheduled: true;
-    model: monaco.editor.ITextModel;
-    // merged range
-    range: monaco.Range;
-    // latest cancellation token
-    token: monaco.CancellationToken;
-    promise: Promise<monaco.languages.SemanticTokens | undefined>;
-    resolve: (value: monaco.languages.SemanticTokens | undefined) => void;
-    reject: (reason: unknown) => void;
-};
+type RangeSemanticTokensRequest =
+    | {
+          scheduled: false;
+      }
+    | {
+          scheduled: true;
+          model: monaco.editor.ITextModel;
+          // merged range
+          range: monaco.Range;
+          // latest cancellation token
+          token: monaco.CancellationToken;
+          promise: Promise<monaco.languages.SemanticTokens | undefined>;
+          resolve: (value: monaco.languages.SemanticTokens | undefined) => void;
+          reject: (reason: unknown) => void;
+      };
 export class DocumentRangeSemanticTokensProviderAdapter
-    implements monaco.languages.DocumentRangeSemanticTokensProvider {
-
-    private worker?: (...uris: monaco.Uri[]) => Promise<monaco.languages.typescript.TypeScriptWorker>;
-
+    implements monaco.languages.DocumentRangeSemanticTokensProvider
+{
+    private worker?: (
+        ...uris: monaco.Uri[]
+    ) => Promise<monaco.languages.typescript.TypeScriptWorker>;
 
     constructor(
         private maxLength: number = 50000,
         private debounceInterval: number = 500,
-    ) {
-    }
+    ) {}
 
     // --- batcher implementation ---
     private requests: Map<string, RangeSemanticTokensRequest> = new Map();
 
     public provideDocumentRangeSemanticTokens(
-        model: monaco.editor.ITextModel, 
-        range: monaco.Range, 
-        token: monaco.CancellationToken): 
-    Promise<monaco.languages.SemanticTokens| undefined> {
+        model: monaco.editor.ITextModel,
+        range: monaco.Range,
+        token: monaco.CancellationToken,
+    ): Promise<monaco.languages.SemanticTokens | undefined> {
         if (!this.shouldRun(model)) {
             return Promise.resolve(undefined);
         }
@@ -83,7 +85,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         if (!request) {
             // not currently running any request for this model,
             // execute immediately and mark as running
-            this.requests.set(resource, {scheduled: false});
+            this.requests.set(resource, { scheduled: false });
             return this.executeBatched(resource, model, range, token);
         }
         return this.updateRequest(request, model, resource, range, token);
@@ -97,11 +99,11 @@ export class DocumentRangeSemanticTokensProviderAdapter
     }
 
     private updateRequest(
-        request: RangeSemanticTokensRequest, 
+        request: RangeSemanticTokensRequest,
         model: monaco.editor.ITextModel,
         resource: string,
-        range: monaco.Range, 
-        token: monaco.CancellationToken
+        range: monaco.Range,
+        token: monaco.CancellationToken,
     ): Promise<monaco.languages.SemanticTokens | undefined> {
         if (request.scheduled) {
             // abandon old range, since it's probably out of view anyway
@@ -111,9 +113,11 @@ export class DocumentRangeSemanticTokensProviderAdapter
         }
         let resolve;
         let reject;
-        const promise = new Promise<monaco.languages.SemanticTokens | undefined>((res, rej) => {
+        const promise = new Promise<
+            monaco.languages.SemanticTokens | undefined
+        >((res, rej) => {
             resolve = res;
-            reject= rej;
+            reject = rej;
         });
         this.requests.set(resource, {
             scheduled: true,
@@ -121,8 +125,10 @@ export class DocumentRangeSemanticTokensProviderAdapter
             range,
             token,
             promise,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             resolve: resolve!,
-            reject: reject!
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            reject: reject!,
         });
         return promise;
     }
@@ -139,10 +145,13 @@ export class DocumentRangeSemanticTokensProviderAdapter
             return;
         }
 
-        this.requests.set(resource, {scheduled: false});
+        this.requests.set(resource, { scheduled: false });
 
         const { model, range, token, resolve, reject } = request;
-        this.executeBatched(resource, model, range, token).then(resolve, reject);
+        this.executeBatched(resource, model, range, token).then(
+            resolve,
+            reject,
+        );
     }
 
     // --- adapter implementation ---
@@ -153,10 +162,10 @@ export class DocumentRangeSemanticTokensProviderAdapter
 
     async executeBatched(
         resource: string,
-        model: monaco.editor.ITextModel, 
-        range: monaco.Range, 
-        token: monaco.CancellationToken): 
-    Promise<monaco.languages.SemanticTokens| undefined> {
+        model: monaco.editor.ITextModel,
+        range: monaco.Range,
+        token: monaco.CancellationToken,
+    ): Promise<monaco.languages.SemanticTokens | undefined> {
         let isWaitingForWorker = false;
         const cb = () => {
             if (!isWaitingForWorker) {
@@ -168,32 +177,39 @@ export class DocumentRangeSemanticTokensProviderAdapter
         setTimeout(cb, this.debounceInterval);
         const start = model.getOffsetAt({
             lineNumber: range.startLineNumber,
-            column: range.startColumn
-        })
+            column: range.startColumn,
+        });
         const end = model.getOffsetAt({
             lineNumber: range.endLineNumber,
-            column: range.endColumn
-        })
+            column: range.endColumn,
+        });
         const worker = await this.getWorker(model.uri);
         // check after await
         if (model.isDisposed() || token.isCancellationRequested) {
             return undefined;
         }
         isWaitingForWorker = true;
-        const result = await worker.getEncodedSemanticClassifications(resource, start, end);
+        const result = await worker.getEncodedSemanticClassifications(
+            resource,
+            start,
+            end,
+        );
         isWaitingForWorker = false;
         // check after await
         if (!result || model.isDisposed() || token.isCancellationRequested) {
             return undefined;
         }
         const { spans } = result;
-        const data = this.convertTokens(model, spans );
+        const data = this.convertTokens(model, spans);
         return {
-            data: new Uint32Array(data)
-        }
+            data: new Uint32Array(data),
+        };
     }
 
-    private convertTokens(model: monaco.editor.ITextModel, inputs: number[]): number[] {
+    private convertTokens(
+        model: monaco.editor.ITextModel,
+        inputs: number[],
+    ): number[] {
         return convertSemanticTokens(inputs, model, {
             convertType: (raw) => {
                 let modifier = raw;
@@ -206,7 +222,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
                 // fix the type and modifiers to have better highlighting
 
                 // readonly + lower bits (declaration, static, async)
-                if ((modifier & 0b1000) && (modifier & 0b111)) {
+                if (modifier & 0b1000 && modifier & 0b111) {
                     // only keep readonly, so less important
                     // modifiers don't take priority
                     modifier = 0b1000;
@@ -224,32 +240,37 @@ export class DocumentRangeSemanticTokensProviderAdapter
                     // would be highlighted as a normal property,
                     // instead of the same as this, self, super, etc..
                     modifier &= ~0b10000;
-                } 
+                }
                 // offset by 1
                 type--;
                 // only keep the bits of modifier that matters
                 modifier &= 0xff;
                 return [type, modifier];
-            }
+            },
         });
     }
 
     // --- debug/utils --- can be removed when upstreaming the work
 
     // lazy get the worker, since typescript may not be loaded yet
-    private async getWorker(resource: monaco.Uri): Promise<monaco.languages.typescript.TypeScriptWorker> {
+    private async getWorker(
+        resource: monaco.Uri,
+    ): Promise<monaco.languages.typescript.TypeScriptWorker> {
         while (!this.worker) {
             console.log("getting instance of TypeScript worker...");
             try {
-                this.worker = await monaco.languages.typescript.getTypeScriptWorker();
+                this.worker =
+                    await monaco.languages.typescript.getTypeScriptWorker();
                 if (!this.worker) {
                     throw new Error("getTypeScriptWorker returned undefined");
                 }
                 break;
             } catch (e) {
                 console.error("Failed to get worker", e);
-                console.warn("will try again in a bit. This should not happen when this is initialized as part of TS mode");
-                await new Promise(r => setTimeout(r, 1000));
+                console.warn(
+                    "will try again in a bit. This should not happen when this is initialized as part of TS mode",
+                );
+                await new Promise((r) => setTimeout(r, 1000));
             }
         }
         return await this.worker(resource);

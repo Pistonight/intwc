@@ -1,2 +1,5 @@
-/node_modules
+node_modules
 /monaco-editor-patch
+/src/theme/colors.ts
+/vite-plugin/*.js
+.eslintcache
