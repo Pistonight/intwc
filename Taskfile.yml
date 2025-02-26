@@ -49,3 +49,8 @@ tasks:
     cmds:
       - bun scripts/post-patch.ts
       - pnpm install
+
+  git-push:
+    cmds:
+      - git remote set-url origin git@github.com:Pistonight/intwc
+      - git push
