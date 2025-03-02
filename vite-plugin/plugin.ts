@@ -91,9 +91,7 @@ const createEditorMain = (options: Options) => {
     return lines.join("\n");
 };
 
-export const intwcChunks = {
-    intwc: ["@pistonite/intwc", "monaco-editor"],
-};
+export const intwcChunks = { intwc: ["@pistonite/intwc", "monaco-editor"] };
 
 const updateRollupOutputConfig = (
     output: OutputOptions | undefined,
@@ -104,10 +102,7 @@ const updateRollupOutputConfig = (
     const manualChunks =
         typeof manualChunksOriginal === "function"
             ? manualChunksOriginal
-            : {
-                  ...manualChunksOriginal,
-                  ...intwcChunks,
-              };
+            : { ...manualChunksOriginal, ...intwcChunks };
     const chunkFileNames = (info: PreRenderedChunk): string => {
         for (let i = 0; i < info.moduleIds.length; i++) {
             if (info.moduleIds[i].match(/esm[/\\]vs[/\\]basic-languages/)) {
@@ -156,18 +151,9 @@ const updateRollupOutputConfig = (
         return assetFileNamesOriginal;
     };
     if (output) {
-        return {
-            ...output,
-            chunkFileNames,
-            assetFileNames,
-            manualChunks,
-        };
+        return { ...output, chunkFileNames, assetFileNames, manualChunks };
     }
-    return {
-        chunkFileNames,
-        assetFileNames,
-        manualChunks,
-    };
+    return { chunkFileNames, assetFileNames, manualChunks };
 };
 
 export default function plugin(options: Options): Plugin {

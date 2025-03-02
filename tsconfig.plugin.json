@@ -1,4 +1,5 @@
 {
     "extends": "../mono-dev/tsconfig/node.json",
+    "compilerOptions": { "lib": ["esnext", "dom"] },
     "include": ["vite-plugin", "scripts"]
 }

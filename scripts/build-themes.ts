@@ -10,10 +10,7 @@ function opacity(color: ColorFormat, alpha: number) {
     return color.hex + alphaHex;
 }
 function createTokenStyle(tokens: string[], style: Record<string, unknown>) {
-    return tokens.map((token) => ({
-        token,
-        ...style,
-    }));
+    return tokens.map((token) => ({ token, ...style }));
 }
 
 function createCommentTokenStyle(style: Record<string, unknown>) {
@@ -121,51 +118,21 @@ function createDarkTheme() {
                 foreground: mocha.overlay2.hex,
                 fontStyle: "italic",
             }),
-            ...createPunctuationTokenStyle({
-                foreground: mocha.overlay2.hex,
-            }),
-            ...createKeywordTokenStyle({
-                foreground: mocha.mauve.hex,
-            }),
-            ...createOperatorTokenStyle({
-                foreground: mocha.sapphire.hex,
-            }),
-            ...createVariableTokenStyle({
-                foreground: mocha.lavender.hex,
-            }),
-            ...createVariableLibraryTokenStyle({
-                foreground: mocha.red.hex,
-            }),
-            ...createVariableConstTokenStyle({
-                foreground: mocha.peach.hex,
-            }),
-            ...createFunctionTokenStyle({
-                foreground: mocha.yellow.hex,
-            }),
-            ...createMacroTokenStyle({
-                foreground: mocha.peach.hex,
-            }),
-            ...createTypeTokenStyle({
-                foreground: mocha.blue.hex,
-            }),
-            ...createLiteralConstantTokenStyle({
-                foreground: mocha.peach.hex,
-            }),
-            ...createLiteralStringTokenStyle({
-                foreground: mocha.green.hex,
-            }),
-            ...createLiteralRegExpTokenStyle({
-                foreground: mocha.red.hex,
-            }),
-            ...createSourceTokenStyle({
-                foreground: mocha.text.hex,
-            }),
-            ...createEscapeTokenStyle({
-                foreground: mocha.pink.hex,
-            }),
-            ...createTagTokenStyle({
-                foreground: mocha.pink.hex,
-            }),
+            ...createPunctuationTokenStyle({ foreground: mocha.overlay2.hex }),
+            ...createKeywordTokenStyle({ foreground: mocha.mauve.hex }),
+            ...createOperatorTokenStyle({ foreground: mocha.sapphire.hex }),
+            ...createVariableTokenStyle({ foreground: mocha.lavender.hex }),
+            ...createVariableLibraryTokenStyle({ foreground: mocha.red.hex }),
+            ...createVariableConstTokenStyle({ foreground: mocha.peach.hex }),
+            ...createFunctionTokenStyle({ foreground: mocha.yellow.hex }),
+            ...createMacroTokenStyle({ foreground: mocha.peach.hex }),
+            ...createTypeTokenStyle({ foreground: mocha.blue.hex }),
+            ...createLiteralConstantTokenStyle({ foreground: mocha.peach.hex }),
+            ...createLiteralStringTokenStyle({ foreground: mocha.green.hex }),
+            ...createLiteralRegExpTokenStyle({ foreground: mocha.red.hex }),
+            ...createSourceTokenStyle({ foreground: mocha.text.hex }),
+            ...createEscapeTokenStyle({ foreground: mocha.pink.hex }),
+            ...createTagTokenStyle({ foreground: mocha.pink.hex }),
         ],
     } as const;
 }
@@ -206,51 +173,23 @@ function createLightTheme() {
                 foreground: latte.overlay2.hex,
                 fontStyle: "italic",
             }),
-            ...createPunctuationTokenStyle({
-                foreground: latte.overlay2.hex,
-            }),
-            ...createKeywordTokenStyle({
-                foreground: latte.maroon.hex,
-            }),
-            ...createOperatorTokenStyle({
-                foreground: latte.overlay2.hex,
-            }),
-            ...createVariableTokenStyle({
-                foreground: latte.text.hex,
-            }),
+            ...createPunctuationTokenStyle({ foreground: latte.overlay2.hex }),
+            ...createKeywordTokenStyle({ foreground: latte.maroon.hex }),
+            ...createOperatorTokenStyle({ foreground: latte.overlay2.hex }),
+            ...createVariableTokenStyle({ foreground: latte.text.hex }),
             ...createVariableLibraryTokenStyle({
                 foreground: latte.yellow.hex,
             }),
-            ...createVariableConstTokenStyle({
-                foreground: latte.blue.hex,
-            }),
-            ...createFunctionTokenStyle({
-                foreground: latte.mauve.hex,
-            }),
-            ...createMacroTokenStyle({
-                foreground: latte.sapphire.hex,
-            }),
-            ...createTypeTokenStyle({
-                foreground: latte.teal.hex,
-            }),
-            ...createLiteralConstantTokenStyle({
-                foreground: latte.green.hex,
-            }),
-            ...createLiteralStringTokenStyle({
-                foreground: latte.red.hex,
-            }),
-            ...createLiteralRegExpTokenStyle({
-                foreground: latte.red.hex,
-            }),
-            ...createSourceTokenStyle({
-                foreground: latte.text.hex,
-            }),
-            ...createEscapeTokenStyle({
-                foreground: latte.pink.hex,
-            }),
-            ...createTagTokenStyle({
-                foreground: latte.green.hex,
-            }),
+            ...createVariableConstTokenStyle({ foreground: latte.blue.hex }),
+            ...createFunctionTokenStyle({ foreground: latte.mauve.hex }),
+            ...createMacroTokenStyle({ foreground: latte.sapphire.hex }),
+            ...createTypeTokenStyle({ foreground: latte.teal.hex }),
+            ...createLiteralConstantTokenStyle({ foreground: latte.green.hex }),
+            ...createLiteralStringTokenStyle({ foreground: latte.red.hex }),
+            ...createLiteralRegExpTokenStyle({ foreground: latte.red.hex }),
+            ...createSourceTokenStyle({ foreground: latte.text.hex }),
+            ...createEscapeTokenStyle({ foreground: latte.pink.hex }),
+            ...createTagTokenStyle({ foreground: latte.green.hex }),
         ],
     };
 }

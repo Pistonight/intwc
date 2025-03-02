@@ -4,9 +4,7 @@ import { persist } from "@pistonite/pure/memory";
 import type { InputMode, Preference, PreferenceOption } from "./types.ts";
 
 const getDefaultPreference = (): Preference => {
-    return {
-        inputMode: "code",
-    };
+    return { inputMode: "code" };
 };
 const deserializePreference = (value: string): Preference => {
     try {
@@ -27,10 +25,7 @@ const validatePreference = (obj: unknown): Preference => {
             inputMode = value;
         }
     }
-    return {
-        ...getDefaultPreference(),
-        inputMode,
-    };
+    return { ...getDefaultPreference(), inputMode };
 };
 
 const preference = persist({
@@ -41,10 +36,7 @@ const preference = persist({
 });
 
 export const initPreference = ({ persist, defaults }: PreferenceOption) => {
-    const value: Preference = {
-        ...getDefaultPreference(),
-        ...defaults,
-    };
+    const value: Preference = { ...getDefaultPreference(), ...defaults };
     if (persist) {
         preference.init(value);
     } else {
@@ -65,10 +57,7 @@ export function getPreference(): Preference {
 }
 
 export const setPreference = (newPreference: Partial<Preference>) => {
-    const newPreferenceMerged = {
-        ...preference.get(),
-        ...newPreference,
-    };
+    const newPreferenceMerged = { ...preference.get(), ...newPreference };
     preference.set(newPreferenceMerged);
 };
 

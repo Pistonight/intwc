@@ -8,12 +8,7 @@ export const spanToRange = (model: TextModel, start: number, end: number) => {
         model.getPositionAt(start);
     const { lineNumber: endLineNumber, column: endColumn } =
         model.getPositionAt(end);
-    return {
-        startLineNumber,
-        startColumn,
-        endLineNumber,
-        endColumn,
-    };
+    return { startLineNumber, startColumn, endLineNumber, endColumn };
 };
 
 export const rangeToSpan = (

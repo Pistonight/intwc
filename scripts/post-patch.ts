@@ -24,7 +24,9 @@ for (const key in patchedDependencies) {
     if (key === `monaco-editor@${monacoEditorVersion}`) {
         found = true;
         const file = patchedDependencies[key];
-        patchedDependencies[key] = "packages/intwc/" + file;
+        if (file.startsWith("patches")) {
+            patchedDependencies[key] = "packages/intwc/" + file;
+        }
         console.log("Patched", key, "to", patchedDependencies[key]);
         continue;
     }

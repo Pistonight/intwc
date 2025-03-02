@@ -1,6 +1,4 @@
-export type ThemeOptions = {
-    customTokenColors?: CustomTokenColor[];
-};
+export type ThemeOptions = { customTokenColors?: CustomTokenColor[] };
 
 export type CustomTokenColor = {
     /**

@@ -43,9 +43,7 @@ const setTimeout = self.setTimeout;
 
 /** Per-model request for semantic tokens */
 type RangeSemanticTokensRequest =
-    | {
-          scheduled: false;
-      }
+    | { scheduled: false }
     | {
           scheduled: true;
           model: monaco.editor.ITextModel;
@@ -201,9 +199,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         }
         const { spans } = result;
         const data = this.convertTokens(model, spans);
-        return {
-            data: new Uint32Array(data),
-        };
+        return { data: new Uint32Array(data) };
     }
 
     private convertTokens(

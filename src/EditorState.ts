@@ -37,9 +37,7 @@ export type CodeEditorApi = {
     subscribe: (callback: (filename: string) => void) => () => void;
 };
 
-let editorOptions: EditorOption = {
-    options: {},
-};
+let editorOptions: EditorOption = { options: {} };
 
 export const setEditorOptions = (options: EditorOption) => {
     editorOptions = options;

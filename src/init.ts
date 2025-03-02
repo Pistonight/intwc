@@ -47,9 +47,7 @@ export function initCodeEditor({
                 });
             }
 
-            patchMonacoTypeScript({
-                semanticTokensMaxLength: -1,
-            });
+            patchMonacoTypeScript({ semanticTokensMaxLength: -1 });
         }
     }
 
@@ -79,10 +77,7 @@ export function initCodeEditor({
             if (getLegend && provideDocumentRangeSemanticTokens) {
                 monaco.languages.registerDocumentRangeSemanticTokensProvider(
                     id,
-                    {
-                        getLegend,
-                        provideDocumentRangeSemanticTokens,
-                    },
+                    { getLegend, provideDocumentRangeSemanticTokens },
                 );
             } else if (getLegend || provideDocumentRangeSemanticTokens) {
                 console.warn(

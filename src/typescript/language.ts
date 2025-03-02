@@ -22,23 +22,13 @@ export const language = <monaco.languages.IMonarchLanguage>{
             // something that *could* be a function call/declaration
             [
                 /#?[a-z_$][\w$]*(?=(\s*\(|\s*<.*>\s*\(|\s*`))/,
-                {
-                    cases: {
-                        "@keywords": "keyword",
-                        "@default": "function",
-                    },
-                },
+                { cases: { "@keywords": "keyword", "@default": "function" } },
             ],
 
             // patch old rule
             [
                 /#?[a-z_$][\w$]*/,
-                {
-                    cases: {
-                        "@keywords": "keyword",
-                        "@default": "variable",
-                    },
-                },
+                { cases: { "@keywords": "keyword", "@default": "variable" } },
             ],
             ...original.tokenizer.common.slice(1),
         ],
