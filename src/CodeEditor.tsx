@@ -31,5 +31,5 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ref]);
 
-    return <div ref={setRef} {...props} />;
+    return <div ref={setRef} style={{ height: "100%" }} {...props} />;
 };

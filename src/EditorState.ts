@@ -110,7 +110,7 @@ export class EditorState implements CodeEditorApi {
     public setFileContent(filename: string, content: string) {
         const model = this.models.get(filename);
         if (model && model.getValue() !== content) {
-            // model.setValue(content);
+            model.setValue(content);
         }
     }
 

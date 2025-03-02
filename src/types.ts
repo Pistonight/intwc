@@ -54,7 +54,7 @@ export type LanguageOption = {
     typescript?: TSOption;
 
     /** Custom language support */
-    custom: LanguageClient[];
+    custom?: LanguageClient[];
 };
 
 export type EditorOption = {

@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor";
+import { addDarkSubscriber } from "@pistonite/pure/pref";
 
 import { DarkTheme, LightTheme, type Theme } from "./colors.ts";
 import type { CustomTokenColor, ThemeOptions } from "./options.ts";
@@ -13,11 +14,9 @@ export const initThemes = (options: ThemeOptions) => {
         customTokenColors,
     );
 
-    monaco.editor.setTheme("intwc-dark");
-};
-
-export const setDarkTheme = (dark: boolean) => {
-    monaco.editor.setTheme(dark ? "intwc-dark" : "intwc-light");
+    addDarkSubscriber((dark) => {
+        monaco.editor.setTheme(dark ? "intwc-dark" : "intwc-light");
+    }, true);
 };
 
 const defineTheme = (
