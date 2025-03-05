@@ -1,5 +1,7 @@
 node_modules
+.prettierignore
 /monaco-editor-patch
 /src/theme/colors.ts
 /vite-plugin/*.js
-.eslintcache
+/tsconfig*.json
+/eslint.config.js

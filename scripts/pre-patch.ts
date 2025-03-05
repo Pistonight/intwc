@@ -1,4 +1,4 @@
-// @ts-ignore
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from "node:fs";
 
 const ROOT_PACKAGE = "../../package.json";
@@ -27,6 +27,7 @@ if (needFix) {
     for (const key in patchedDependencies) {
         if (key.startsWith("monaco-editor@")) {
             console.log("Removing", key);
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete patchedDependencies[key];
             modified = true;
         }

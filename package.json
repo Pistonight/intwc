@@ -23,10 +23,9 @@
     },
     "devDependencies": {
         "@catppuccin/palette": "^1.7.1",
+        "@types/bun": "^1.2.4",
         "@types/react": "catalog:",
-        "eslint": "catalog:",
         "mono-dev": "workspace:*",
-        "typescript": "catalog:",
         "vite": "catalog:"
     }
 }
