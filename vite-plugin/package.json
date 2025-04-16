@@ -18,7 +18,7 @@
         "directory": "vite-plugin"
     },
     "devDependencies": {
-        "rollup": "^4.34.8",
+        "rollup": "^4.40.0",
         "vite": "catalog:"
     }
 }
