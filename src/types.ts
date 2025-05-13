@@ -1,6 +1,6 @@
-import type * as monaco from "monaco-editor";
 import type { LanguageClient } from "./language/LanguageClient.ts";
 import type { ThemeOptions } from "./theme/options.ts";
+import type { IEditorOptions, IGlobalEditorOptions } from "./monacoTypes.ts";
 
 /** Option to pass in to init */
 export type InitOption = {
@@ -63,7 +63,7 @@ export type EditorOption = {
      *
      * These are added on top of the defaults provided by this wrapper
      */
-    options: monaco.editor.IEditorOptions & monaco.editor.IGlobalEditorOptions;
+    options: IEditorOptions & IGlobalEditorOptions;
 };
 
 export type TSOption = {

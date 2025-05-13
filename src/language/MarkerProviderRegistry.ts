@@ -1,7 +1,7 @@
 import * as monaco from "monaco-editor";
 import { serial } from "@pistonite/pure/sync";
 
-import type { MarkerResult, TextModel } from "./LanguageClient.ts";
+import type { MarkerResult, TextModel } from "../monacoTypes.ts";
 
 export type MarkerProvider = {
     owner: string;

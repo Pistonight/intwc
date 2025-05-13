@@ -5,3 +5,4 @@ export * from "./init.ts";
 export * from "./utils.ts";
 export * from "./language/LanguageClient.ts";
 export * from "./language/SemanticConverter.ts";
+export * from "./monacoTypes.ts";

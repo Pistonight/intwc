@@ -1,4 +1,14 @@
-import type { Range, TextModel } from "./language/LanguageClient.ts";
+import * as monaco from "monaco-editor";
+
+import type { Uri, Range, TextModel } from "./monacoTypes.ts";
+
+export const getNormalizedPath = (filename: string): string => {
+    return getFileUri(filename).path;
+};
+
+export const getFileUri = (filename: string): Uri => {
+    return monaco.Uri.file(filename);
+};
 
 /**
  * Convert text span (start, end) to line number and column range
