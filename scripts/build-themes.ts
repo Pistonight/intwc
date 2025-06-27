@@ -139,6 +139,9 @@ function createDarkTheme() {
 
 type Theme = ReturnType<typeof createDarkTheme>;
 
+// default catppuccin latte.green has contrast issue with latte.base
+const LIGHT_GREEN = "#30901b";
+
 function createLightTheme() {
     const latte = flavors.latte.colors;
     return {
@@ -184,12 +187,12 @@ function createLightTheme() {
             ...createFunctionTokenStyle({ foreground: latte.mauve.hex }),
             ...createMacroTokenStyle({ foreground: latte.sapphire.hex }),
             ...createTypeTokenStyle({ foreground: latte.teal.hex }),
-            ...createLiteralConstantTokenStyle({ foreground: latte.green.hex }),
+            ...createLiteralConstantTokenStyle({ foreground: LIGHT_GREEN }),
             ...createLiteralStringTokenStyle({ foreground: latte.red.hex }),
             ...createLiteralRegExpTokenStyle({ foreground: latte.red.hex }),
             ...createSourceTokenStyle({ foreground: latte.text.hex }),
             ...createEscapeTokenStyle({ foreground: latte.pink.hex }),
-            ...createTagTokenStyle({ foreground: latte.green.hex }),
+            ...createTagTokenStyle({ foreground: LIGHT_GREEN }),
         ],
     };
 }
