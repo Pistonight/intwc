@@ -54,6 +54,19 @@ export const createBytePosToCharPosArray = (script: string): Uint32Array => {
     return bytePosToCharPos;
 };
 
+/** Convert byte position to character position (createBytePosToCharPosArray is faster for large number of calls) */
+export const bytePosToCharPos = (script: string, bytePos: number): number => {
+    const encoder = new TextEncoder(); // UTF-8 encoder
+    let b = 0;
+    for (let charPos = 0; charPos < script.length; charPos++) {
+        if (b >= bytePos) {
+            return charPos;
+        }
+        b += encoder.encode(script[charPos]).length;
+    }
+    return script.length;
+};
+
 /** Convert character position to byte position */
 export const charPosToBytePos = (script: string, charPos: number): number => {
     return new TextEncoder().encode(script.slice(0, charPos)).length;
