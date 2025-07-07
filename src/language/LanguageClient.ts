@@ -13,6 +13,8 @@ import type {
     TextModel,
 } from "../monacoTypes.ts";
 
+import type { DiagnosticProvider } from "./diagnostic_provider.ts";
+
 export type LanguageClient = {
     /** Get the language id */
     getId: () => string;
@@ -21,6 +23,11 @@ export type LanguageClient = {
     getTokenizer?: () => LanguageTokenizer;
     /** Get the configuration to register on initialization */
     getConfiguration?: () => LanguageConfiguration;
+
+    /** Get diagnostic providers for this language */
+    getDiagnosticProviders?: () => DiagnosticProvider[];
+
+
     /** Get the marker owners that `provideMarkers` will be called with */
     getMarkerOwners?: () => string[];
     /** Provide markers for the given model and owner */

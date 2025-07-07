@@ -6,6 +6,7 @@ import { initThemes } from "./theme";
 import { patchMonacoTypeScript } from "./typescript";
 import { registerMarkerProvider } from "./language/MarkerProviderRegistry.ts";
 import { setEditorOptions } from "./EditorState.ts";
+import { registerDiagnosticProvider } from "./language/diagnostic_provider.ts";
 
 export function initCodeEditor({
     preferences,
@@ -85,17 +86,22 @@ export function initCodeEditor({
                 );
             }
 
-            const provideMarkers = client.provideMarkers?.bind(client);
-            const markerOwners = client.getMarkerOwners?.();
-            if (provideMarkers && markerOwners) {
-                markerOwners.forEach((owner) => {
-                    registerMarkerProvider(id, {
-                        owner,
-                        provide: (model) => provideMarkers(model, owner),
-                    });
-                });
-                // note: the provider invocation is registered
-                // in EditorState using the onDidChangeContent event
+            // const provideMarkers = client.provideMarkers?.bind(client);
+            // const markerOwners = client.getMarkerOwners?.();
+            // if (provideMarkers && markerOwners) {
+            //     markerOwners.forEach((owner) => {
+            //         registerMarkerProvider(id, {
+            //             owner,
+            //             provide: (model) => provideMarkers(model, owner),
+            //         });
+            //     });
+            //     // note: the provider invocation is registered
+            //     // in EditorState using the onDidChangeContent event
+            // }
+
+            const diagnosticProviders = client.getDiagnosticProviders?.();
+            if (diagnosticProviders) {
+                diagnosticProviders.forEach(p => registerDiagnosticProvider(id, p));
             }
 
             const provideCompletionItems =

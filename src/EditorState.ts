@@ -4,6 +4,7 @@ import { getProvideMarkersCallback } from "./language/MarkerProviderRegistry";
 import type { EditorOption } from "./types.ts";
 import type { Position } from "./monacoTypes.ts";
 import { getFileUri, getNormalizedPath } from "./utils.ts";
+import { provideMarkers } from "./language/diagnostic_provider.ts";
 
 export type CodeEditorEvent = "content-changed" | "cursor-position-changed";
 
@@ -217,10 +218,11 @@ export class EditorState implements CodeEditorApi {
         const model = this.models.get(filename);
         if (!model) {
             const model = monaco.editor.createModel(content, language, uri);
-            const provideMarkersCallback = getProvideMarkersCallback();
+            // const provideMarkersCallback = getProvideMarkersCallback();
             // there can be only one change event listener, so this is not exposed
             model.onDidChangeContent(() => {
-                provideMarkersCallback(model);
+                // provideMarkersCallback(model);
+                void provideMarkers(filename, model, this.getCursorOffset() || 0);
                 const subscribers = this.subscribers.get("content-changed");
                 subscribers?.forEach((subscriber) => subscriber(filename));
             });
@@ -236,7 +238,8 @@ export class EditorState implements CodeEditorApi {
             });
             this.models.set(filename, model);
             // invoke the callback once to provide markers initially
-            provideMarkersCallback(model);
+            void provideMarkers(filename, model, 0);
+            // provideMarkersCallback(model);
         }
         this.switchToFile(filename);
     }
