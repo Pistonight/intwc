@@ -25,7 +25,8 @@ export type LanguageClient = {
     getConfiguration?: () => LanguageConfiguration;
 
     /** Get diagnostic providers for this language */
-    getDiagnosticProviders?: () => DiagnosticProvider[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getDiagnosticProviders?: () => DiagnosticProvider<any, any>[];
 
 
     /** Get the marker owners that `provideMarkers` will be called with */
