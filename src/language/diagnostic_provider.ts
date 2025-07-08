@@ -1,7 +1,6 @@
 import * as monaco from "monaco-editor";
 
 import type { MarkerData, TextModel } from "../monacoTypes.ts";
-import { debounce } from "@pistonite/pure/sync";
 
 /** 
  * The interface implemented by language services to integrate
@@ -140,29 +139,14 @@ export const registerDiagnosticProvider = <T, D extends MarkerData>(
 
 /** 
  * Start a new provide marker request
- *
- * Awaiting on this will wait until markers are provided (or cancelled)
- * from all providers, which may not be what you want, since
- * that is usually non-blocking operation
  */
-export const provideMarkers = debounce({
-    fn: async (filename: string, model: TextModel, charPos: number) => {
+export const provideMarkers = (filename: string, model: TextModel, charPos: number) => {
         const languageId = model.getLanguageId();
         const providers = registry.get(languageId);
         if (!providers) {
             return [];
         }
-        const promises = providers.map((provider) => {
-            return provider.updateMarkers(filename, model, charPos);
+        providers.forEach((provider) => {
+            void provider.updateMarkers(filename, model, charPos);
         });
-        try {
-            await Promise.all(promises);
-        } catch(e) {
-            console.error("one of the diagnostic provider errored.");
-            console.error(e);
-        }
-    },
-    interval: 200,
-    disregardExecutionTime: true,
-});
-
+    }
