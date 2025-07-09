@@ -1,19 +1,20 @@
 import * as monaco from "monaco-editor";
+import { once } from "@pistonite/pure/sync";
 
 import { initPreference } from "./preference.ts";
 import type { InitOption } from "./types.ts";
 import { initThemes } from "./theme";
 import { patchMonacoTypeScript } from "./typescript";
-import { registerMarkerProvider } from "./language/MarkerProviderRegistry.ts";
-import { setEditorOptions } from "./EditorState.ts";
+import { setEditorOptions } from "./editor_state.ts";
 import { registerDiagnosticProvider } from "./language/diagnostic_provider.ts";
+import { log } from "./internal.ts";
 
-export function initCodeEditor({
+const initCodeEditorInternal = ({
     preferences,
     language,
     editor,
     theme,
-}: InitOption) {
+}: InitOption) => {
     initPreference(preferences || {});
 
     const { typescript, custom } = language || {};
@@ -23,8 +24,8 @@ export function initCodeEditor({
     // initialize TypeScript options
     if (typescript) {
         if (!import.meta.env.INTWC_TYPESCRIPT) {
-            console.warn(
-                "[intwc] TypeScript init options are set, but TypeScript is not loaded using intwc plugin!!!",
+            log.warn(
+                "TypeScript init options are set, but TypeScript is not loaded using intwc plugin!!!",
             );
         } else {
             const dom = typescript.dom ?? true;
@@ -64,44 +65,33 @@ export function initCodeEditor({
                 monaco.languages.registerTokensProviderFactory(id, {
                     create: () => tokenizer,
                 });
-                // monaco.languages.setMonarchTokensProvider(id, tokenizer);
             }
             const configuration = client.getConfiguration?.();
             if (configuration) {
                 monaco.languages.setLanguageConfiguration(id, configuration);
             }
 
-            const getLegend = client.getSemanticTokensLegend?.bind(client);
-            const provideDocumentRangeSemanticTokens =
-                client.provideDocumentRangeSemanticTokens?.bind(client);
-
-            if (getLegend && provideDocumentRangeSemanticTokens) {
+            const semanticTokensProvider = client.getSemanticTokensProvider?.();
+            if (semanticTokensProvider) {
+                const legend = semanticTokensProvider.legend;
+                const provideDocumentRangeSemanticTokens =
+                    semanticTokensProvider.provideDocumentRangeSemanticTokens.bind(
+                        semanticTokensProvider,
+                    );
                 monaco.languages.registerDocumentRangeSemanticTokensProvider(
                     id,
-                    { getLegend, provideDocumentRangeSemanticTokens },
-                );
-            } else if (getLegend || provideDocumentRangeSemanticTokens) {
-                console.warn(
-                    `[intwc] semantic token provider for "${id}" is not registered. You need both getSemanticTokensLegend and provideDocumentRangeSemanticTokens`,
+                    {
+                        getLegend: () => legend,
+                        provideDocumentRangeSemanticTokens,
+                    },
                 );
             }
 
-            // const provideMarkers = client.provideMarkers?.bind(client);
-            // const markerOwners = client.getMarkerOwners?.();
-            // if (provideMarkers && markerOwners) {
-            //     markerOwners.forEach((owner) => {
-            //         registerMarkerProvider(id, {
-            //             owner,
-            //             provide: (model) => provideMarkers(model, owner),
-            //         });
-            //     });
-            //     // note: the provider invocation is registered
-            //     // in EditorState using the onDidChangeContent event
-            // }
-
             const diagnosticProviders = client.getDiagnosticProviders?.();
             if (diagnosticProviders) {
-                diagnosticProviders.forEach(p => registerDiagnosticProvider(id, p));
+                diagnosticProviders.forEach((p) =>
+                    registerDiagnosticProvider(id, p),
+                );
             }
 
             const provideCompletionItems =
@@ -123,4 +113,7 @@ export function initCodeEditor({
     if (editor) {
         setEditorOptions(editor);
     }
-}
+};
+
+/** Initialize INTWC code editor service */
+export const initCodeEditor = once({ fn: initCodeEditorInternal });

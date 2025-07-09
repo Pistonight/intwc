@@ -1,6 +1,8 @@
 import * as monaco from "monaco-editor";
 import { addDarkSubscriber } from "@pistonite/pure/pref";
 
+import { log } from "../internal.ts";
+
 import { DarkTheme, LightTheme, type Theme } from "./colors.ts";
 import type { CustomTokenColor, ThemeOptions } from "./options.ts";
 
@@ -39,9 +41,7 @@ const defineTheme = (
             } else {
                 const color = tokenNameToColor.get(value);
                 if (!color) {
-                    console.warn(
-                        `[intwc] unknown token in custom color: ${value}`,
-                    );
+                    log.warn(`unknown token in custom color: ${value}`);
                     return;
                 }
                 rules.push({ token, foreground: color });

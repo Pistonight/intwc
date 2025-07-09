@@ -1,6 +1,6 @@
-import type { LanguageClient } from "./language/LanguageClient.ts";
+import type { LanguageClient } from "./language/language_client.ts";
 import type { ThemeOptions } from "./theme/options.ts";
-import type { IEditorOptions, IGlobalEditorOptions } from "./monacoTypes.ts";
+import type { IEditorOptions, IGlobalEditorOptions } from "./monaco_types.ts";
 
 /** Option to pass in to init */
 export type InitOption = {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { type CodeEditorApi, EditorState } from "./EditorState.ts";
+import { type CodeEditorApi, EditorState } from "./editor_state.ts";
 
 export type CodeEditorProps = {
     /**
