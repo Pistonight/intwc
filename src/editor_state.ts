@@ -217,10 +217,8 @@ export class EditorState implements CodeEditorApi {
         const model = this.models.get(filename);
         if (!model) {
             const model = monaco.editor.createModel(content, language, uri);
-            // const provideMarkersCallback = getProvideMarkersCallback();
             // there can be only one change event listener, so this is not exposed
             model.onDidChangeContent(() => {
-                // provideMarkersCallback(model);
                 void provideMarkers(
                     filename,
                     model,
@@ -242,7 +240,6 @@ export class EditorState implements CodeEditorApi {
             this.models.set(filename, model);
             // invoke the callback once to provide markers initially
             void provideMarkers(filename, model, 0);
-            // provideMarkersCallback(model);
         }
         this.switchToFile(filename);
     }
