@@ -1,4 +1,4 @@
-import type { TextModel } from "../monacoTypes.ts";
+import type { TextModel } from "../monaco_types.ts";
 import { spanToRange } from "../utils.ts";
 
 /**

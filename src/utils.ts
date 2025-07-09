@@ -1,6 +1,6 @@
 import * as monaco from "monaco-editor";
 
-import type { Uri, Range, TextModel } from "./monacoTypes.ts";
+import type { Uri, Range, TextModel } from "./monaco_types.ts";
 
 export const getNormalizedPath = (filename: string): string => {
     return getFileUri(filename).path;
@@ -10,9 +10,7 @@ export const getFileUri = (filename: string): Uri => {
     return monaco.Uri.file(filename);
 };
 
-/**
- * Convert text span (start, end) to line number and column range
- */
+/** Convert text span (start, end) to line number and column range */
 export const spanToRange = (model: TextModel, start: number, end: number) => {
     const { lineNumber: startLineNumber, column: startColumn } =
         model.getPositionAt(start);
@@ -21,6 +19,7 @@ export const spanToRange = (model: TextModel, start: number, end: number) => {
     return { startLineNumber, startColumn, endLineNumber, endColumn };
 };
 
+/** Convert range to text span (start, end)*/
 export const rangeToSpan = (
     model: TextModel,
     range: Range,
@@ -45,12 +44,14 @@ export const rangeToSpan = (
 export const createBytePosToCharPosArray = (script: string): Uint32Array => {
     const encoder = new TextEncoder(); // UTF-8 encoder
     const byteLength = encoder.encode(script).length;
-    const bytePosToCharPos = new Uint32Array(byteLength);
+    // + 1 for the ending byte pos
+    const bytePosToCharPos = new Uint32Array(byteLength + 1);
     let bytePos = 0;
     for (let charPos = 0; charPos < script.length; charPos++) {
         bytePosToCharPos[bytePos] = charPos;
         bytePos += encoder.encode(script[charPos]).length;
     }
+    bytePosToCharPos[bytePos] = script.length;
     return bytePosToCharPos;
 };
 

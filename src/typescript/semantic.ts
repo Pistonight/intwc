@@ -1,5 +1,7 @@
 import * as monaco from "monaco-editor";
-import { convertSemanticTokens } from "../language/SemanticConverter";
+
+import { convertSemanticTokens } from "../language/convert_semantic.ts";
+import { log } from "../internal.ts";
 
 const legend: monaco.languages.SemanticTokensLegend = {
     tokenTypes: [
@@ -253,7 +255,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         resource: monaco.Uri,
     ): Promise<monaco.languages.typescript.TypeScriptWorker> {
         while (!this.worker) {
-            console.log("getting instance of TypeScript worker...");
+            log.info("getting instance of TypeScript worker...");
             try {
                 this.worker =
                     await monaco.languages.typescript.getTypeScriptWorker();
@@ -262,9 +264,10 @@ export class DocumentRangeSemanticTokensProviderAdapter
                 }
                 break;
             } catch (e) {
-                console.error("Failed to get worker", e);
-                console.warn(
-                    "will try again in a bit. This should not happen when this is initialized as part of TS mode",
+                log.error("failed to get TypeScript worker, will retry");
+                log.error(e);
+                log.warn(
+                    "this should not happen when this is initialized as part of TS mode",
                 );
                 await new Promise((r) => setTimeout(r, 1000));
             }

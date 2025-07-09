@@ -6,12 +6,13 @@ import type {
     CompletionResult,
     LanguageConfiguration,
     LanguageTokenizer,
-    MarkerResult,
     Position,
     SemanticTokensLegend,
     SemanticTokensResult,
     TextModel,
-} from "../monacoTypes.ts";
+} from "../monaco_types.ts";
+
+import type { DiagnosticProvider } from "./diagnostic_provider.ts";
 
 export type LanguageClient = {
     /** Get the language id */
@@ -21,18 +22,13 @@ export type LanguageClient = {
     getTokenizer?: () => LanguageTokenizer;
     /** Get the configuration to register on initialization */
     getConfiguration?: () => LanguageConfiguration;
-    /** Get the marker owners that `provideMarkers` will be called with */
-    getMarkerOwners?: () => string[];
-    /** Provide markers for the given model and owner */
-    provideMarkers?: (model: TextModel, owner: string) => MarkerResult;
 
-    getSemanticTokensLegend?: () => SemanticTokensLegend;
+    /** Get diagnostic providers for this language */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getDiagnosticProviders?: () => DiagnosticProvider<any, any>[];
 
-    provideDocumentRangeSemanticTokens?: (
-        model: TextModel,
-        range: Range,
-        token: CancellationToken,
-    ) => SemanticTokensResult;
+    /** Get the semantic token provider for this language */
+    getSemanticTokensProvider?: () => SemanticProvider;
 
     getCompletionTriggerCharacters?: () => string[];
 
@@ -47,4 +43,13 @@ export type LanguageClient = {
         item: CompletionItem,
         token: CancellationToken,
     ) => CompletionItem;
+};
+
+export type SemanticProvider = {
+    legend: SemanticTokensLegend;
+    provideDocumentRangeSemanticTokens: (
+        model: TextModel,
+        range: Range,
+        token: CancellationToken,
+    ) => SemanticTokensResult;
 };
