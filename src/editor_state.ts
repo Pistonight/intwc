@@ -70,6 +70,9 @@ export type CodeEditorApi = {
         event: CodeEditorEvent,
         callback: (filename: string) => void,
     ) => () => void;
+
+    /** Set if the editor is read only (in the future, this might be changed to per-file based */
+    setReadonly(isReadonly: boolean): void;
 };
 
 let editorOptions: EditorOption = { options: {} };
@@ -249,5 +252,11 @@ export class EditorState implements CodeEditorApi {
         if (model) {
             this.instance.setModel(model);
         }
+    }
+
+    public setReadonly(isReadonly: boolean): void {
+        this.instance.updateOptions({
+            readOnly: isReadonly,
+        });
     }
 }
