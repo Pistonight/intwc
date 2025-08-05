@@ -17,22 +17,16 @@ export type Options = {
     html?: boolean;
 };
 
-const createBasicLanguagesMonacoContributionModule = (
-    basicLanguages: string[],
-) => {
+const createBasicLanguagesMonacoContributionModule = (basicLanguages: string[]) => {
     const lines = ["import '../editor/editor.api.js';"];
     basicLanguages.forEach((lang) => {
-        lines.push(
-            `import '../basic-languages/${lang}/${lang}.contribution.js';`,
-        );
+        lines.push(`import '../basic-languages/${lang}/${lang}.contribution.js';`);
     });
     return lines.join("\n");
 };
 
 const createEditorMain = (options: Options) => {
-    const lines = [
-        createBasicLanguagesMonacoContributionModule(options.basicLanguages),
-    ];
+    const lines = [createBasicLanguagesMonacoContributionModule(options.basicLanguages)];
     if (options.typescript) {
         lines.push("import '../language/typescript/monaco.contribution';");
     }
@@ -45,9 +39,7 @@ const createEditorMain = (options: Options) => {
     if (options.html) {
         lines.push("import '../language/html/monaco.contribution';");
     }
-    lines.push(
-        "self['MonacoEnvironment'] = { getWorker: async (_, label) => {",
-    );
+    lines.push("self['MonacoEnvironment'] = { getWorker: async (_, label) => {");
     if (options.typescript) {
         lines.push(`if (label === 'typescript' || label === 'javascript') {`);
         lines.push(
@@ -93,9 +85,7 @@ const createEditorMain = (options: Options) => {
 
 export const intwcChunks = { intwc: ["@pistonite/intwc", "monaco-editor"] };
 
-const updateRollupOutputConfig = (
-    output: OutputOptions | undefined,
-): OutputOptions => {
+const updateRollupOutputConfig = (output: OutputOptions | undefined): OutputOptions => {
     const chunkFileNamesOriginal = output?.chunkFileNames;
     const assetFileNamesOriginal = output?.assetFileNames;
     const manualChunksOriginal = output?.manualChunks;
@@ -165,8 +155,7 @@ export default function plugin(options: Options): Plugin {
             if (!config.define) {
                 config.define = {};
             }
-            config.define["import.meta.env.INTWC_TYPESCRIPT"] =
-                !!options.typescript;
+            config.define["import.meta.env.INTWC_TYPESCRIPT"] = !!options.typescript;
             if (!config.build) {
                 config.build = {};
             }

@@ -50,10 +50,7 @@ function createMacroTokenStyle(style: Record<string, unknown>) {
 }
 
 function createTypeTokenStyle(style: Record<string, unknown>) {
-    return createTokenStyle(
-        ["class", "type", "namespace", "support.type"],
-        style,
-    );
+    return createTokenStyle(["class", "type", "namespace", "support.type"], style);
 }
 
 function createLiteralConstantTokenStyle(style: Record<string, unknown>) {
@@ -73,10 +70,7 @@ function createSourceTokenStyle(style: Record<string, unknown>) {
 }
 
 function createEscapeTokenStyle(style: Record<string, unknown>) {
-    return createTokenStyle(
-        ["constant.character.escape", "string.escape"],
-        style,
-    );
+    return createTokenStyle(["constant.character.escape", "string.escape"], style);
 }
 
 function createTagTokenStyle(style: Record<string, unknown>) {
@@ -198,9 +192,7 @@ function createLightTheme() {
 }
 
 function emitTheme(ident: string, theme: Theme) {
-    console.log(
-        `export const ${ident} = ` + JSON.stringify(theme, null, 4) + ";",
-    );
+    console.log(`export const ${ident} = ` + JSON.stringify(theme, null, 4) + ";");
 }
 
 emitTheme("DarkTheme", createDarkTheme());

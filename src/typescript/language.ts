@@ -26,10 +26,7 @@ export const language = <monaco.languages.IMonarchLanguage>{
             ],
 
             // patch old rule
-            [
-                /#?[a-z_$][\w$]*/,
-                { cases: { "@keywords": "keyword", "@default": "variable" } },
-            ],
+            [/#?[a-z_$][\w$]*/, { cases: { "@keywords": "keyword", "@default": "variable" } }],
             ...original.tokenizer.common.slice(1),
         ],
     },

@@ -9,12 +9,7 @@ import { setEditorOptions } from "./editor_state.ts";
 import { registerDiagnosticProvider } from "./language/diagnostic_provider.ts";
 import { log } from "./internal.ts";
 
-const initCodeEditorInternal = ({
-    preferences,
-    language,
-    editor,
-    theme,
-}: InitOption) => {
+const initCodeEditorInternal = ({ preferences, language, editor, theme }: InitOption) => {
     initPreference(preferences || {});
 
     const { typescript, custom } = language || {};
@@ -78,29 +73,21 @@ const initCodeEditorInternal = ({
                     semanticTokensProvider.provideDocumentRangeSemanticTokens.bind(
                         semanticTokensProvider,
                     );
-                monaco.languages.registerDocumentRangeSemanticTokensProvider(
-                    id,
-                    {
-                        getLegend: () => legend,
-                        provideDocumentRangeSemanticTokens,
-                    },
-                );
+                monaco.languages.registerDocumentRangeSemanticTokensProvider(id, {
+                    getLegend: () => legend,
+                    provideDocumentRangeSemanticTokens,
+                });
             }
 
             const diagnosticProviders = client.getDiagnosticProviders?.();
             if (diagnosticProviders) {
-                diagnosticProviders.forEach((p) =>
-                    registerDiagnosticProvider(id, p),
-                );
+                diagnosticProviders.forEach((p) => registerDiagnosticProvider(id, p));
             }
 
-            const provideCompletionItems =
-                client.provideCompletionItems?.bind(client);
+            const provideCompletionItems = client.provideCompletionItems?.bind(client);
             if (provideCompletionItems) {
-                const completionTriggerCharacters =
-                    client.getCompletionTriggerCharacters?.();
-                const resolveCompletionItem =
-                    client.resolveCompletionItem?.bind(client);
+                const completionTriggerCharacters = client.getCompletionTriggerCharacters?.();
+                const resolveCompletionItem = client.resolveCompletionItem?.bind(client);
                 monaco.languages.registerCompletionItemProvider(id, {
                     triggerCharacters: completionTriggerCharacters,
                     provideCompletionItems,

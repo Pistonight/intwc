@@ -12,18 +12,13 @@ export const getFileUri = (filename: string): Uri => {
 
 /** Convert text span (start, end) to line number and column range */
 export const spanToRange = (model: TextModel, start: number, end: number) => {
-    const { lineNumber: startLineNumber, column: startColumn } =
-        model.getPositionAt(start);
-    const { lineNumber: endLineNumber, column: endColumn } =
-        model.getPositionAt(end);
+    const { lineNumber: startLineNumber, column: startColumn } = model.getPositionAt(start);
+    const { lineNumber: endLineNumber, column: endColumn } = model.getPositionAt(end);
     return { startLineNumber, startColumn, endLineNumber, endColumn };
 };
 
 /** Convert range to text span (start, end)*/
-export const rangeToSpan = (
-    model: TextModel,
-    range: Range,
-): [number, number] => {
+export const rangeToSpan = (model: TextModel, range: Range): [number, number] => {
     const start = model.getOffsetAt({
         lineNumber: range.startLineNumber,
         column: range.startColumn,

@@ -7,12 +7,10 @@ export type MarkerSeverity = monaco.MarkerSeverity;
 export type Range = monaco.Range;
 export type Position = monaco.Position;
 export type CancellationToken = monaco.CancellationToken;
-export type SemanticTokensProvider =
-    monaco.languages.DocumentRangeSemanticTokensProvider;
+export type SemanticTokensProvider = monaco.languages.DocumentRangeSemanticTokensProvider;
 export type SemanticTokensLegend = monaco.languages.SemanticTokensLegend;
 export type SemanticTokens = monaco.languages.SemanticTokens;
-export type SemanticTokensResult =
-    monaco.languages.ProviderResult<monaco.languages.SemanticTokens>;
+export type SemanticTokensResult = monaco.languages.ProviderResult<monaco.languages.SemanticTokens>;
 export type CompletionItemProvider = monaco.languages.CompletionItemProvider;
 export type CompletionItem = monaco.languages.CompletionItem;
 export type CompletionList = monaco.languages.CompletionList;

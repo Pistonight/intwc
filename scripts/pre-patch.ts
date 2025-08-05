@@ -15,9 +15,7 @@ if (needFix && !rootPackageJson.pnpm) {
     needFix = false;
 }
 if (needFix && !rootPackageJson.pnpm.patchedDependencies) {
-    console.log(
-        "No `patchedDependencies` key in root package.json, skipping pre-patch",
-    );
+    console.log("No `patchedDependencies` key in root package.json, skipping pre-patch");
     needFix = false;
 }
 

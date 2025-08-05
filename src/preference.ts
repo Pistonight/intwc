@@ -62,9 +62,6 @@ export const setPreference = (newPreference: Partial<Preference>) => {
 };
 
 export function useInputMode(): InputMode {
-    const preference = useSyncExternalStore(
-        addPreferenceSubscriber,
-        getPreference,
-    );
+    const preference = useSyncExternalStore(addPreferenceSubscriber, getPreference);
     return preference.inputMode;
 }

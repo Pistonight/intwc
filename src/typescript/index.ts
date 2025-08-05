@@ -12,8 +12,6 @@ export function patchMonacoTypeScript(options?: Option) {
     monaco.languages.setMonarchTokensProvider("typescript", language);
     monaco.languages.registerDocumentRangeSemanticTokensProvider(
         "typescript",
-        new DocumentRangeSemanticTokensProviderAdapter(
-            options?.semanticTokensMaxLength,
-        ),
+        new DocumentRangeSemanticTokensProviderAdapter(options?.semanticTokensMaxLength),
     );
 }

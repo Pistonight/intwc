@@ -39,10 +39,7 @@ export type LanguageClient = {
         token: CancellationToken,
     ) => CompletionResult;
 
-    resolveCompletionItem?: (
-        item: CompletionItem,
-        token: CancellationToken,
-    ) => CompletionItem;
+    resolveCompletionItem?: (item: CompletionItem, token: CancellationToken) => CompletionItem;
 };
 
 export type SemanticProvider = {

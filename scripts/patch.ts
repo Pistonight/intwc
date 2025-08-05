@@ -55,15 +55,12 @@ const addPatchInlineBefore = (content: string, before: string) => {
     if (index === -1) {
         throw new Error("`before` not found in addPatchInlineBefore");
     }
-    lines[currentLine] =
-        line.substring(0, index) + content + line.substring(index);
+    lines[currentLine] = line.substring(0, index) + content + line.substring(index);
 };
 
 const patchTsWorker = (mode: "esm" | "dev" | "min") => {
     if (mode === "esm") {
-        skipUntil(
-            (line) => line.trim() === "// src/language/typescript/tsWorker.ts",
-        );
+        skipUntil((line) => line.trim() === "// src/language/typescript/tsWorker.ts");
         skipUntil((line) => line.trim().includes("class _TypeScriptWorker {"));
     }
     if (mode !== "min") {
@@ -74,14 +71,11 @@ const patchTsWorker = (mode: "esm" | "dev" | "min") => {
     let fileNameIsLibFnName = "fileNameIsLib";
     if (mode === "min") {
         const oldLine = lines[currentLine];
-        const provideInlayHintsIdx = oldLine.indexOf(
-            "async provideInlayHints(",
-        );
+        const provideInlayHintsIdx = oldLine.indexOf("async provideInlayHints(");
         if (provideInlayHintsIdx === -1) {
             throw new Error("provideInlayHints not found");
         }
-        const afterProvideInlayHintsPart =
-            oldLine.substring(provideInlayHintsIdx);
+        const afterProvideInlayHintsPart = oldLine.substring(provideInlayHintsIdx);
         const ifIdx = afterProvideInlayHintsPart.indexOf("){if(");
         if (ifIdx === -1) {
             throw new Error("if not found inside provideInlayHints");
@@ -92,10 +86,7 @@ const patchTsWorker = (mode: "esm" | "dev" | "min") => {
             throw new Error(") not found after if");
         }
         fileNameIsLibFnName = afterIfPart.substring(0, closeIdx);
-        console.log(
-            "found minified name of fileNameIsLib=",
-            fileNameIsLibFnName,
-        );
+        console.log("found minified name of fileNameIsLib=", fileNameIsLibFnName);
     }
 
     const patchContent = `
@@ -125,15 +116,8 @@ const patchTypeScriptWorkerInterface = () => {
 patchFile("monaco-editor-patch/esm/vs/language/typescript/ts.worker.js", () =>
     patchTsWorker("esm"),
 );
-patchFile("monaco-editor-patch/dev/vs/language/typescript/tsWorker.js", () =>
-    patchTsWorker("dev"),
-);
-patchFile("monaco-editor-patch/min/vs/language/typescript/tsWorker.js", () =>
-    patchTsWorker("min"),
-);
+patchFile("monaco-editor-patch/dev/vs/language/typescript/tsWorker.js", () => patchTsWorker("dev"));
+patchFile("monaco-editor-patch/min/vs/language/typescript/tsWorker.js", () => patchTsWorker("min"));
 
 patchFile("monaco-editor-patch/monaco.d.ts", patchTypeScriptWorkerInterface);
-patchFile(
-    "monaco-editor-patch/esm/vs/editor/editor.api.d.ts",
-    patchTypeScriptWorkerInterface,
-);
+patchFile("monaco-editor-patch/esm/vs/editor/editor.api.d.ts", patchTypeScriptWorkerInterface);

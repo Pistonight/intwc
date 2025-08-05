@@ -113,9 +113,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         }
         let resolve;
         let reject;
-        const promise = new Promise<
-            monaco.languages.SemanticTokens | undefined
-        >((res, rej) => {
+        const promise = new Promise<monaco.languages.SemanticTokens | undefined>((res, rej) => {
             resolve = res;
             reject = rej;
         });
@@ -148,10 +146,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         this.requests.set(resource, { scheduled: false });
 
         const { model, range, token, resolve, reject } = request;
-        this.executeBatched(resource, model, range, token).then(
-            resolve,
-            reject,
-        );
+        this.executeBatched(resource, model, range, token).then(resolve, reject);
     }
 
     // --- adapter implementation ---
@@ -189,11 +184,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
             return undefined;
         }
         isWaitingForWorker = true;
-        const result = await worker.getEncodedSemanticClassifications(
-            resource,
-            start,
-            end,
-        );
+        const result = await worker.getEncodedSemanticClassifications(resource, start, end);
         isWaitingForWorker = false;
         // check after await
         if (!result || model.isDisposed() || token.isCancellationRequested) {
@@ -204,10 +195,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         return { data: new Uint32Array(data) };
     }
 
-    private convertTokens(
-        model: monaco.editor.ITextModel,
-        inputs: number[],
-    ): number[] {
+    private convertTokens(model: monaco.editor.ITextModel, inputs: number[]): number[] {
         return convertSemanticTokens(inputs, model, {
             convertType: (raw) => {
                 let modifier = raw;
@@ -257,8 +245,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
         while (!this.worker) {
             log.info("getting instance of TypeScript worker...");
             try {
-                this.worker =
-                    await monaco.languages.typescript.getTypeScriptWorker();
+                this.worker = await monaco.languages.typescript.getTypeScriptWorker();
                 if (!this.worker) {
                     throw new Error("getTypeScriptWorker returned undefined");
                 }
@@ -266,9 +253,7 @@ export class DocumentRangeSemanticTokensProviderAdapter
             } catch (e) {
                 log.error("failed to get TypeScript worker, will retry");
                 log.error(e);
-                log.warn(
-                    "this should not happen when this is initialized as part of TS mode",
-                );
+                log.warn("this should not happen when this is initialized as part of TS mode");
                 await new Promise((r) => setTimeout(r, 1000));
             }
         }

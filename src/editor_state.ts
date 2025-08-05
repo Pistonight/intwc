@@ -66,10 +66,7 @@ export type CodeEditorApi = {
     setCursorOffset: (offset: number) => void;
 
     /** Subscribe to editor events */
-    subscribe: (
-        event: CodeEditorEvent,
-        callback: (filename: string) => void,
-    ) => () => void;
+    subscribe: (event: CodeEditorEvent, callback: (filename: string) => void) => () => void;
 
     /** Set if the editor is read only (in the future, this might be changed to per-file based */
     setReadonly(isReadonly: boolean): void;
@@ -192,10 +189,7 @@ export class EditorState implements CodeEditorApi {
         this.instance.setPosition(position);
     }
 
-    public subscribe(
-        event: CodeEditorEvent,
-        callback: (filename: string) => void,
-    ): () => void {
+    public subscribe(event: CodeEditorEvent, callback: (filename: string) => void): () => void {
         let subscribers = this.subscribers.get(event);
         if (!subscribers) {
             subscribers = [];
@@ -222,11 +216,7 @@ export class EditorState implements CodeEditorApi {
             const model = monaco.editor.createModel(content, language, uri);
             // there can be only one change event listener, so this is not exposed
             model.onDidChangeContent(() => {
-                void provideMarkers(
-                    filename,
-                    model,
-                    this.getCursorOffset() || 0,
-                );
+                void provideMarkers(filename, model, this.getCursorOffset() || 0);
                 const subscribers = this.subscribers.get("content-changed");
                 subscribers?.forEach((subscriber) => subscriber(filename));
             });

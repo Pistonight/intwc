@@ -84,21 +84,12 @@ class DiagnosticDriver<T, D extends MarkerData> {
         this.serial = 0;
     }
 
-    public async updateMarkers(
-        filename: string,
-        model: TextModel,
-        charPos: number,
-    ): Promise<void> {
+    public async updateMarkers(filename: string, model: TextModel, charPos: number): Promise<void> {
         this.serial = getNextDiagnosticId();
         const serial = this.serial;
         const activeText = model.getValue();
         // start a new request
-        const tasks = await this.provider.newRequest(
-            filename,
-            model,
-            activeText,
-            charPos,
-        );
+        const tasks = await this.provider.newRequest(filename, model, activeText, charPos);
         if (serial !== this.serial || model.isDisposed()) {
             return;
         }
@@ -123,11 +114,7 @@ class DiagnosticDriver<T, D extends MarkerData> {
             );
             this.cachedData = mergeResult.nextData;
             this.cachedMarkers = mergeResult.nextMarkers;
-            monaco.editor.setModelMarkers(
-                model,
-                this.provider.ownerId,
-                this.cachedMarkers,
-            );
+            monaco.editor.setModelMarkers(model, this.provider.ownerId, this.cachedMarkers);
             previousBatch = newBatch;
         }
         if (len > 0) {
@@ -140,11 +127,7 @@ class DiagnosticDriver<T, D extends MarkerData> {
             );
             this.cachedData = mergeResult.nextData;
             this.cachedMarkers = mergeResult.nextMarkers;
-            monaco.editor.setModelMarkers(
-                model,
-                this.provider.ownerId,
-                this.cachedMarkers,
-            );
+            monaco.editor.setModelMarkers(model, this.provider.ownerId, this.cachedMarkers);
         }
     }
 }
@@ -169,11 +152,7 @@ export const registerDiagnosticProvider = <T, D extends MarkerData>(
 /**
  * Start a new provide marker request
  */
-export const provideMarkers = (
-    filename: string,
-    model: TextModel,
-    charPos: number,
-) => {
+export const provideMarkers = (filename: string, model: TextModel, charPos: number) => {
     const languageId = model.getLanguageId();
     const providers = registry.get(languageId);
     if (!providers) {

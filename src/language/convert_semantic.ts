@@ -29,30 +29,24 @@ export const convertSemanticTokens = (
             continue;
         }
 
-        const { startLineNumber, startColumn, endLineNumber, endColumn } =
-            spanToRange(model, start, start + length);
+        const { startLineNumber, startColumn, endLineNumber, endColumn } = spanToRange(
+            model,
+            start,
+            start + length,
+        );
         if (startLineNumber === endLineNumber) {
             const deltaLine = startLineNumber - prevLine;
-            const deltaStart =
-                deltaLine === 0 ? startColumn - prevStart : startColumn - 1;
+            const deltaStart = deltaLine === 0 ? startColumn - prevStart : startColumn - 1;
 
             outputs.push(deltaLine, deltaStart, length, type, modifier);
             prevStart = startColumn;
         } else {
             // token spanning multiple lines, convert it to separate entries
             const firstStart = startColumn - 1;
-            const firstLength =
-                model.getLineLength(startLineNumber) - firstStart;
+            const firstLength = model.getLineLength(startLineNumber) - firstStart;
             const firstDeltaLine = startLineNumber - prevLine;
-            const firstDeltaStart =
-                firstDeltaLine === 0 ? firstStart - prevStart : firstStart - 1;
-            outputs.push(
-                firstDeltaLine,
-                firstDeltaStart,
-                firstLength,
-                type,
-                modifier,
-            );
+            const firstDeltaStart = firstDeltaLine === 0 ? firstStart - prevStart : firstStart - 1;
+            outputs.push(firstDeltaLine, firstDeltaStart, firstLength, type, modifier);
 
             // middle full lines
             for (let i = startLineNumber + 1; i < endLineNumber; i++) {

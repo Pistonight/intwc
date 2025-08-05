@@ -9,12 +9,7 @@ import type { CustomTokenColor, ThemeOptions } from "./options.ts";
 export const initThemes = (options: ThemeOptions) => {
     const customTokenColors = options.customTokenColors || [];
     defineTheme("intwc-dark", "vs-dark", DarkTheme, customTokenColors);
-    defineTheme(
-        "intwc-light",
-        "vs",
-        LightTheme as unknown as Theme,
-        customTokenColors,
-    );
+    defineTheme("intwc-light", "vs", LightTheme as unknown as Theme, customTokenColors);
 
     addDarkSubscriber((dark) => {
         monaco.editor.setTheme(dark ? "intwc-dark" : "intwc-light");

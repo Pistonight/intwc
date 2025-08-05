@@ -12,10 +12,7 @@ export type CodeEditorProps = {
     onCreated?: (api: CodeEditorApi) => (() => void) | undefined;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export const CodeEditor: React.FC<CodeEditorProps> = ({
-    onCreated,
-    ...props
-}) => {
+export const CodeEditor: React.FC<CodeEditorProps> = ({ onCreated, ...props }) => {
     const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
