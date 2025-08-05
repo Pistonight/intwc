@@ -23,7 +23,7 @@
     },
     "devDependencies": {
         "@catppuccin/palette": "^1.7.1",
-        "@types/bun": "^1.2.18",
+        "@types/bun": "^1.2.19",
         "@types/react": "catalog:",
         "mono-dev": "workspace:*",
         "vite": "catalog:"
